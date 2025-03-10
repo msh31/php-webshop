@@ -5,7 +5,7 @@ A simple yet secure login and signup system built with PHP and MySQL.
 - 🔑 User registration & login
 - 🔐 Password hashing for security
 - 🛡️ Session management
-  - 🎨 Simple and clean UI 
+- 🎨 Simple and clean UI 
 - 🗄️ MySQL database integration
 
 ## ⚙️ Installation
