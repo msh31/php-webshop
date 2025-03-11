@@ -19,5 +19,9 @@ require_once 'config.php';
         <a href="login.php" class="text-blue-500 hover:underline">Login</a>
         <a href="register.php" class="text-blue-500 hover:underline">Register</a>
     </div>
+    <div class="flex justify-center items-center gap-5 text-7xl p-6">
+        <a href="logout.php" class="text-blue-500 hover:underline">Logout</a>
+        <a href="dashboard.php" class="text-blue-500 hover:underline">Dashboard</a>
+    </div>
 </body>
 </html>
