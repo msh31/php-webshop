@@ -31,8 +31,7 @@ if (isset($_POST['submit'])) {
         displayError("Invalid email format.");
     } else {
         if (register_user($pdo, $username, $email, $password)) {
-            echo 'success';
-            //redirect(BASE_URL . 'login.php');
+            redirect("login.php");
         } else {
             displayError("Registration failed.");
         }

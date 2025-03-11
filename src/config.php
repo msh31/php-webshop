@@ -24,7 +24,7 @@ function getDatabaseConnection() {
 
 // Session configuration
 session_start();
-define('BASE_URL', '/');
+define('BASE_URL', '/php-auth-system/src/');
 
 // Helper functions
 function displayError($message) {

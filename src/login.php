@@ -1,9 +1,9 @@
 <?php
 require_once 'config.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
 $pdo = getDatabaseConnection();
 
@@ -38,8 +38,8 @@ if (isset($_POST['submit'])) {
         displayError("Please fill in all fields.");
     } else {
         if (login_user($pdo, $username, $password)) {
-            echo 'success';
-            //redirect(BASE_URL . 'login.php');
+            //echo 'success';
+            redirect(BASE_URL . 'dashboard.php');
         } else {
             displayError("Invalid username or password");
         }
@@ -56,6 +56,8 @@ if (isset($_POST['submit'])) {
     <title>Login</title>
 </head>
 <body class="bg-black text-white">
+<div id="alertPlaceholder"></div>
+
 <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
     <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
