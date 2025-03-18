@@ -6,3 +6,4 @@ composer.lock
 package-lock.json
 src/input.css
 compile.bat
+tailwindcss
