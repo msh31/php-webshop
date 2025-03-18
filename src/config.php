@@ -23,13 +23,13 @@ function getDatabaseConnection() {
 }
 
 // Session configuration
-session_start();
-define('BASE_URL', '/php-auth-system/src/');
 ini_set('session.cookie_httponly', 1);
 ini_set('session.cookie_secure', 1);
 ini_set('session.use_only_cookies', 1);
 ini_set('session.cookie_samesite', 'Lax');
 ini_set('session.gc_maxlifetime', 1800); // 30 minutes
+session_start();
+define('BASE_URL', '/php-auth-system/src/');
 
 // Helper functions
 function displayError($message) {
