@@ -20,13 +20,30 @@ function register_user($pdo, $username, $email, $password) {
     }
 }
 
+function isStrongPassword($password) {
+    // At least 8 characters, one uppercase, one lowercase, one number, one special char
+    return strlen($password) >= 8 &&
+        preg_match('/[A-Z]/', $password) &&
+        preg_match('/[a-z]/', $password) &&
+        preg_match('/[0-9]/', $password) &&
+        preg_match('/[^A-Za-z0-9]/', $password);
+}
+
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
 
     if (!isset($_POST['csrf_token']) || !validateCSRFToken($_POST['csrf_token'])) {
-        die("CSRF validation failed");
+        displayError("CSRF validation failed");
+    }
+
+    if ($_POST['password'] !== $_POST['confirm-password']) {
+        displayError("Passwords do not match.");
+    }
+
+    if (!isStrongPassword($password)) {
+        displayError("Password must be at least 8 characters and include uppercase, lowercase, numbers, and special characters.");
     }
 
     if (empty($username) || empty($email) || empty($password)) {
@@ -34,6 +51,19 @@ if (isset($_POST['submit'])) {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         displayError("Invalid email format.");
     } else {
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ? OR email = ?");
+        $stmt->execute([$username, $email]);
+        if ($stmt->fetchColumn() > 0) {
+            // Check which one exists
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
+            $stmt->execute([$username]);
+            if ($stmt->fetchColumn() > 0) {
+                displayError("Username already taken.");
+            } else {
+                displayError("Email already registered.");
+            }
+        }
+
         if (register_user($pdo, $username, $email, $password)) {
             redirect("login.php");
         } else {

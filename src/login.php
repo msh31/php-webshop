@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
     $password = $_POST['password'];
 
     if (!isset($_POST['csrf_token']) || !validateCSRFToken($_POST['csrf_token'])) {
-        die("CSRF validation failed");
+        displayError("CSRF validation failed");
     }
 
     if (empty($username) || empty($password)) {
