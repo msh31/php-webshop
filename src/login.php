@@ -20,6 +20,7 @@ function login_user($pdo, $username, $password) {
             $_SESSION['username'] = $user['username'];
             $_SESSION['logged_in'] = true;
 
+            session_regenerate_id(true);
             return true;
         } else {
             return false;
