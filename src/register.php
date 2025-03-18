@@ -25,6 +25,10 @@ if (isset($_POST['submit'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
+    if (!isset($_POST['csrf_token']) || !validateCSRFToken($_POST['csrf_token'])) {
+        die("CSRF validation failed");
+    }
+
     if (empty($username) || empty($email) || empty($password)) {
         displayError("Please fill in all fields.");
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -55,6 +59,7 @@ if (isset($_POST['submit'])) {
                 Create an account
             </h1>
             <form class="space-y-4 md:space-y-6" action="register.php" method="post">
+                <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                 <div>
                     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
                         email</label>

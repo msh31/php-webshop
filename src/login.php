@@ -35,6 +35,10 @@ if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
+    if (!isset($_POST['csrf_token']) || !validateCSRFToken($_POST['csrf_token'])) {
+        die("CSRF validation failed");
+    }
+
     if (empty($username) || empty($password)) {
         displayError("Please fill in all fields.");
     } else {
@@ -66,6 +70,7 @@ if (isset($_POST['submit'])) {
                 Sign in to your account
             </h1>
             <form class="space-y-4 md:space-y-6" action="login.php" method="post">
+                <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                 <div>
                     <label for="text"
                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
