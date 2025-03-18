@@ -1,6 +1,8 @@
 <?php
 require_once 'config.php';
 
+checkSessionTimeout();
+
 function isLoggedIn() {
     return isset($_SESSION['logged_in']) && $_SESSION['logged_in'];
 }

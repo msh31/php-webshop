@@ -54,4 +54,15 @@ function validateCSRFToken($token) {
     }
     return true;
 }
+
+function checkSessionTimeout() {
+    $max_idle_time = 1800;
+    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $max_idle_time)) {
+        // Session expired
+        session_unset();
+        session_destroy();
+        redirect("login.php?timeout=1");
+    }
+    $_SESSION['last_activity'] = time();
+}
 ?>
