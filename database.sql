@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `php_auth_system`;
-USE `php_auth_system`;
+CREATE DATABASE IF NOT EXISTS `php_auth_db`;
+USE `php_auth_db`;
 
 CREATE TABLE `users` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
