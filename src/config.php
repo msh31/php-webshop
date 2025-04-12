@@ -1,9 +1,16 @@
 <?php
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.gc_maxlifetime', 1800); // 30 minutes
+session_start();
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 function getDatabaseConnection() {
     try {
-        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/');
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
         $dotenv->load();
 
         $dotenv->required(['DB_HOST', 'DB_USER', 'DB_NAME']);
@@ -13,7 +20,8 @@ function getDatabaseConnection() {
         $pass = $_ENV['DB_PASS'];
         $dbname = $_ENV['DB_NAME'];
 
-        $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+        $pdo = new PDO("mysql:host=$host;port=3306;dbname=$dbname", $user, $pass);
+
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         return $pdo;
@@ -22,13 +30,6 @@ function getDatabaseConnection() {
     }
 }
 
-// Session configuration
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_samesite', 'Lax');
-ini_set('session.gc_maxlifetime', 1800); // 30 minutes
-session_start();
 define('BASE_URL', '/');
 
 // Helper functions
