@@ -1,10 +1,6 @@
 <?php
 require_once 'config.php';
 
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
-
 $pdo = getDatabaseConnection();
 
 function login_user($pdo, $username, $password) {
@@ -26,7 +22,7 @@ function login_user($pdo, $username, $password) {
             return false;
         }
     } catch (PDOException $e) {
-        displayError("Login error: " . $e->getMessage());
+        setErrorMessage("Login error: " . $e->getMessage());
         return false;
     }
 }
@@ -36,17 +32,20 @@ if (isset($_POST['submit'])) {
     $password = $_POST['password'];
 
     if (!isset($_POST['csrf_token']) || !validateCSRFToken($_POST['csrf_token'])) {
-        displayError("CSRF validation failed");
+        setErrorMessage("CSRF validation failed");
+        redirect("login.php");
     }
 
     if (empty($username) || empty($password)) {
-        displayError("Please fill in all fields.");
+        setErrorMessage("Please fill in all fields.");
+        redirect("login.php");
     } else {
         if (login_user($pdo, $username, $password)) {
-            //echo 'success';
+            setSuccessMessage("Login successful!");
             redirect(BASE_URL . 'dashboard.php');
         } else {
-            displayError("Invalid username or password");
+            setErrorMessage("Invalid username or password");
+            redirect("login.php");
         }
     }
 }
@@ -61,7 +60,9 @@ if (isset($_POST['submit'])) {
     <title>Login</title>
 </head>
 <body class="bg-black text-white">
-<div id="alertPlaceholder"></div>
+<div id="alertPlaceholder">
+    <?php echo displayMessages(); ?>
+</div>
 
 <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
     <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -103,7 +104,7 @@ if (isset($_POST['submit'])) {
                     Sign in
                 </button>
                 <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                    Don’t have an account yet? <a href="register.php"
+                    Don't have an account yet? <a href="register.php"
                                                   class="font-medium text-blue-600 hover:underline dark:text-blue-500">Sign
                         up</a>
                 </p>

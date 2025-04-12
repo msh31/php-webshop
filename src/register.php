@@ -1,10 +1,6 @@
 <?php
 require_once 'config.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 $pdo = getDatabaseConnection();
 
 function register_user($pdo, $username, $email, $password) {
@@ -15,7 +11,7 @@ function register_user($pdo, $username, $email, $password) {
         $stmt->execute([$username, $email, $hashedPassword]);
         return true;
     } catch (PDOException $e) {
-        displayError("Registration error: " . $e->getMessage());
+        setErrorMessage("Registration error: " . $e->getMessage());
         return false;
     }
 }
@@ -35,21 +31,26 @@ if (isset($_POST['submit'])) {
     $password = $_POST['password'];
 
     if (!isset($_POST['csrf_token']) || !validateCSRFToken($_POST['csrf_token'])) {
-        displayError("CSRF validation failed");
+        setErrorMessage("CSRF validation failed");
+        redirect("register.php");
     }
 
     if ($_POST['password'] !== $_POST['confirm-password']) {
-        displayError("Passwords do not match.");
+        setErrorMessage("Passwords do not match.");
+        redirect("register.php");
     }
 
     if (!isStrongPassword($password)) {
-        displayError("Password must be at least 8 characters and include uppercase, lowercase, numbers, and special characters.");
+        setErrorMessage("Password must be at least 8 characters and include uppercase, lowercase, numbers, and special characters.");
+        redirect("register.php");
     }
 
     if (empty($username) || empty($email) || empty($password)) {
-        displayError("Please fill in all fields.");
+        setErrorMessage("Please fill in all fields.");
+        redirect("register.php");
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        displayError("Invalid email format.");
+        setErrorMessage("Invalid email format.");
+        redirect("register.php");
     } else {
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ? OR email = ?");
         $stmt->execute([$username, $email]);
@@ -58,16 +59,20 @@ if (isset($_POST['submit'])) {
             $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
             $stmt->execute([$username]);
             if ($stmt->fetchColumn() > 0) {
-                displayError("Username already taken.");
+                setErrorMessage("Username already taken.");
+                redirect("register.php");
             } else {
-                displayError("Email already registered.");
+                setErrorMessage("Email already registered.");
+                redirect("register.php");
             }
         }
 
         if (register_user($pdo, $username, $email, $password)) {
+            setSuccessMessage("Registration successful! You can now log in.");
             redirect("login.php");
         } else {
-            displayError("Registration failed.");
+            setErrorMessage("Registration failed.");
+            redirect("register.php");
         }
     }
 }
@@ -82,6 +87,10 @@ if (isset($_POST['submit'])) {
     <title>Register</title>
 </head>
 <body class="bg-black text-white">
+<div id="alertPlaceholder">
+    <?php echo displayMessages(); ?>
+</div>
+
 <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
     <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -127,7 +136,7 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class="ml-3 text-sm">
                         <label for="terms" class="font-light text-gray-500 dark:text-gray-300">I accept the <a
-                                class="font-medium text-blue-600 hover:underline dark:text-blue-500" href="#">Terms
+                                    class="font-medium text-blue-600 hover:underline dark:text-blue-500" href="#">Terms
                                 and Conditions</a></label>
                     </div>
                 </div>

@@ -26,15 +26,48 @@ function getDatabaseConnection() {
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         return $pdo;
     } catch (PDOException $e) {
-        die("Database connection failed: " . $e->getMessage());
+        setErrorMessage("Database connection failed: " . $e->getMessage());
+        redirect("index.php");
     }
 }
 
 define('BASE_URL', '/');
 
 // Helper functions
+function setErrorMessage($message) {
+    $_SESSION['error_message'] = $message;
+}
+
+function setSuccessMessage($message) {
+    $_SESSION['success_message'] = $message;
+}
+
 function displayError($message) {
-    echo '<div class="error">' . htmlspecialchars($message) . '</div>';
+    setErrorMessage($message);
+}
+
+function displayMessages() {
+    $output = '';
+
+    // Check for error messages
+    if (isset($_SESSION['error_message'])) {
+        $message = $_SESSION['error_message'];
+        $output .= '<div class="p-4 mb-4 text-sm text-red-400 rounded-lg bg-red-50 " role="alert">';
+        $output .= htmlspecialchars($message);
+        $output .= '</div>';
+        unset($_SESSION['error_message']);
+    }
+
+    // Check for success messages
+    if (isset($_SESSION['success_message'])) {
+        $message = $_SESSION['success_message'];
+        $output .= '<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 " role="alert">';
+        $output .= htmlspecialchars($message);
+        $output .= '</div>';
+        unset($_SESSION['success_message']);
+    }
+
+    return $output;
 }
 
 function redirect($location) {
@@ -51,7 +84,8 @@ function generateCSRFToken() {
 
 function validateCSRFToken($token) {
     if (!isset($_SESSION['csrf_token']) || $token !== $_SESSION['csrf_token']) {
-        die("CSRF token validation failed");
+        setErrorMessage("CSRF token validation failed");
+        return false;
     }
     return true;
 }
