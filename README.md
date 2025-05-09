@@ -1,19 +1,20 @@
-# PHP Auth System 🔐
-A simple yet secure login and signup system built with PHP and MySQL.
+# PHP Webshop 💸
+A simple webshop using the [auth system project](https://github.com/msh31/php-auth-system) as a base.
 
 ## ✨ Features 
-- 🔑 User registration & login
-- 🔐 Password hashing for security
-- 🛡️ Session management
-- 🎨 Simple and clean UI 
-- 🗄️ MySQL database integration
+- ⭐ Wishlists / Favorites
+- 💭 User reviews
+- 🛒 Shopping cart
+- 🔍 Product search
+
+## 🔐 Auth updates
+To get the latest security updates you can use the ``update-auth.sh`` script. This will update the auth system to the latest version.
 
 ## ⚙️ Installation
-
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/msh31/php-auth-system.git
-   cd php-auth-system
+   git clone https://github.com/msh31/php-webshop.git
+   cd php-webshop
    ```
 
 2. **Set up environment variables**
@@ -39,10 +40,10 @@ A simple yet secure login and signup system built with PHP and MySQL.
      ```
    - Open `http://localhost:8000` in your browser.
 
-## Contributing 🤝
+## 🤝 Contributing 
 Pull requests are welcome! Feel free to fork this repository and improve upon it.
 
-## License 📜
+## 📜 License 
 This project is licensed under the MIT License.
 
 ---
