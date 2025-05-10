@@ -17,7 +17,7 @@ class DashboardController
     {
         if (!isLoggedIn()) {
             prepareNotification("error", "Please log in to access the dashboard.");
-            redirect(BASE_URL . 'login?dashboard_access=1');
+            redirect(BASE_URL . 'login');
             return;
         }
 

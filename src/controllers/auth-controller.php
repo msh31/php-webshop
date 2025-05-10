@@ -137,18 +137,4 @@ class AuthController {
 
         redirect(BASE_URL);
     }
-
-    public function dashboard() {
-        if (!isLoggedIn()) {
-            prepareNotification("error", "Please log in to access the dashboard.");
-            redirect(BASE_URL . 'login?dashboard_access=1');
-            return;
-        }
-
-        $userData = $this->userModel->getUserById($_SESSION['user_id']);
-
-        $userActivities = getUserActivities($_SESSION['user_id'], 3);
-
-        require_once ROOT_PATH . '/public/views/dashboard.php';
-    }
 }

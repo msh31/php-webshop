@@ -1,9 +1,5 @@
 <?php
 require_once ROOT_PATH . '/public/views/includes/header.php';
-
-if (isset($_GET['dashboard_access']) && $_GET['dashboard_access'] == '1') {
-    prepareNotification("error", "Please log in to access the dashboard.");
-}
 ?>
 
     <div class="container py-5 d-flex justify-content-center align-items-center min-vh-100">
