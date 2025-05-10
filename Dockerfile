@@ -5,10 +5,15 @@ RUN apt-get update && apt-get install -y \
     python3-setuptools \
     python3-pip \
     libzip-dev \
+    git \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql zip
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Set Apache document root to the src directory
 RUN sed -ri -e 's!/var/www/html!/var/www/html/src!g' /etc/apache2/sites-available/*.conf

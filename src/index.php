@@ -1,27 +1,35 @@
 <?php
-require_once 'config.php';
-?>
+require_once __DIR__ . '/bootstrap.php';
+require_once ROOT_PATH . '/controllers/auth-controller.php';
+require_once ROOT_PATH . '/controllers/dashboard-controller.php';
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>PHP Auth System</title>
-</head>
-<body class="bg-black text-white">
-    <p class="flex justify-center items-center text-9xl">
-        hi there, this is the index page
-    </p>
+checkSessionTimeout();
 
-    <div class="flex justify-center items-center gap-5 text-7xl p-6">
-        <a href="login.php" class="text-blue-500 hover:underline">Login</a>
-        <a href="register.php" class="text-blue-500 hover:underline">Register</a>
-    </div>
-    <div class="flex justify-center items-center gap-5 text-7xl p-6">
-        <a href="logout.php" class="text-blue-500 hover:underline">Logout</a>
-        <a href="dashboard.php" class="text-blue-500 hover:underline">Dashboard</a>
-    </div>
-</body>
-</html>
+$request = $_SERVER['REQUEST_URI'];
+$basePath = '/';
+
+$request = trim(str_replace($basePath, '', $request), '/');
+$parts = explode('/', $request);
+$route = $parts[0] ?: 'home';
+
+$authController = new AuthController();
+$dashboardController = new DashboardController();
+
+switch ($route) {
+    case 'login':
+        $authController->login();
+        break;
+    case 'register':
+        $authController->register();
+        break;
+    case 'logout':
+        $authController->logout();
+        break;
+    case 'dashboard':
+        $dashboardController->index();
+        break;
+    case 'home':
+    default:
+        include ROOT_PATH . '/public/views/index.php';
+        break;
+}
