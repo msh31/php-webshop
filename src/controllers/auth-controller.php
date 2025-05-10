@@ -93,7 +93,8 @@ class AuthController {
                 $result = $this->userModel->register($username, $email, $password);
 
                 if ($result) {
-                    $userId = $this->conn->lastInsertId();
+                    $userId = $this->userModel->getLastInsertId();
+
                     logUserActivity($userId, 'Account created');
 
                     prepareNotification("success", "Registration successful!");
