@@ -7,9 +7,6 @@ A simple webshop using the [auth system project](https://github.com/msh31/php-au
 - 🛒 Shopping cart
 - 🔍 Product search
 
-## 🔐 Auth updates
-To get the latest security updates you can use the ``update-auth.sh`` script. This will update the auth system to the latest version.
-
 ## ⚙️ Installation
 1. **Clone the repository**
    ```bash
@@ -23,7 +20,7 @@ To get the latest security updates you can use the ``update-auth.sh`` script. Th
      DB_HOST=localhost
      DB_USER=your_username
      DB_PASS=your_password
-     DB_NAME=php_auth_system
+     DB_NAME=php_webshop
      ```
    - Install `vlucas/phpdotenv` (if not already installed):
      ```bash
