@@ -3,27 +3,21 @@ version: '3.8'
 services:
   apache:
     build: .
-    container_name: apache_server
+    container_name: webshop_apache
     ports:
       - "8080:80"
     volumes:
       - .:/var/www/html/
     depends_on:
       - db
-    command: >
-      bash -c "
-        echo 'Alias /icons/ /var/www/html/src/icons/' > /etc/apache2/conf-available/icons-alias.conf &&
-        a2enconf icons-alias &&
-        apache2-foreground
-      "
 
   db:
     image: mysql:8
-    container_name: mysql_db
+    container_name: webshop_db
     restart: always
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: php_auth_db
+      MYSQL_DATABASE: php_webshop
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
